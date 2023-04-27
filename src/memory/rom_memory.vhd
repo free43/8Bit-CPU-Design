@@ -15,9 +15,9 @@ architecture bh of rom_memory is
     signal enable : std_logic := '0';
     constant my_rom : rom := (      0 => LDA_IMM,
                                     1 => LDA_IMM,
-                                    2 => LDA_MEM,
+                                    2 => LDA_DIR,
                                     3 => LDB_IMM,
-                                    4 => LDB_MEM, 
+                                    4 => LDB_DIR, 
                                     others => x"00" );
 begin
     enable <= '1' when address >= x"00" and address <= x"7F" else '0';
