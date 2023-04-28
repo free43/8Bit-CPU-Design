@@ -8,7 +8,7 @@ entity registers is
     data_in : in std_logic_vector(7 downto 0);
     data_bus0_sel, data_bus1_sel : in std_logic_vector(1 downto 0);
     alu_sel : in std_logic_vector(3 downto 0);
-    ir, address, data_out : out std_logic_vector(7 downto 0);
+    ir_out, address, data_out : out std_logic_vector(7 downto 0);
     nzc_flags : out std_logic_vector(2 downto 0) -- negativ, zero, carry 
   ) ;
 end registers;
@@ -16,9 +16,8 @@ end registers;
 architecture bh of registers is
 
     signal data_bus0, data_bus1 : std_logic_vector(7 downto 0) := x"00";
-    signal pc, npc : std_logic_vector(7 downto 0) := x"00";
-    signal a_out, b_out : std_logic_vector(7 downto 0) := x"00";
-    signal nzc_flags_n : std_logic_vector(2 downto 0) := "000";
+    signal npc : std_logic_vector(7 downto 0) := x"00";
+    signal a, b : std_logic_vector(7 downto 0) := x"00";
     signal alu_out : std_logic_vector(7 downto 0) := x"00";
     signal nzc_alu_flags : std_logic_vector(2 downto 0) := "000";
     component alu
@@ -29,88 +28,57 @@ architecture bh of registers is
           zero, carry, negativ : out std_logic
         ) ;
     end component;
+
+    component ir 
+        port (
+          clk, reset, ir_fetch : in std_logic;
+          data_bus : in std_logic_vector(7 downto 0);  
+          ir_out : out std_logic_vector(7 downto 0)  
+        ) ;
+    end component;
+
+    component mar
+        port (
+          clk, reset, mar_fetch : in std_logic;
+          data_bus : in std_logic_vector(7 downto 0);  
+          mar_out : out std_logic_vector(7 downto 0)  
+        ) ;
+    end component;
+
+    component pc is
+        port (
+          clk, reset, pc_fetch, pc_inc : in std_logic;
+          data_bus : in std_logic_vector(7 downto 0);  
+          pc_out : out std_logic_vector(7 downto 0)  
+        ) ;
+    end component;
+
+    component gpr 
+        port (
+          clk, reset, a_fetch, b_fetch : in std_logic;
+          data_bus : in std_logic_vector(7 downto 0);  
+          a, b : out std_logic_vector(7 downto 0)  
+        ) ;
+    end component;
+
+    component fr 
+        port (
+          clk, reset, fr_fetch : in std_logic;
+          fr_in : in std_logic_vector(2 downto 0);  
+          fr_out : out std_logic_vector(2 downto 0)  
+        ) ;
+    end component;
 begin
 
-    alu_u:alu port map( a => a_out, b => b_out, 
+    ir0: ir port map (clk => clk, reset => reset, ir_fetch => ir_fetch, data_bus => data_bus0, ir_out => ir_out);
+    mar0: mar port map (clk => clk, reset => reset, mar_fetch => mar_fetch, data_bus => data_bus0, mar_out => address);
+    pc0: pc port map (clk => clk, reset => reset, pc_fetch => pc_fetch, pc_inc => pc_inc, data_bus => data_bus0, pc_out => npc);
+    gpr0 : gpr port map (clk => clk, reset => reset, a_fetch => a_fetch, b_fetch => b_fetch, data_bus => data_bus0, a => a, b => b);
+    alu_u:alu port map( a => a, b => b, 
                         alu_out => alu_out, alu_sel => alu_sel, 
                         negativ => nzc_alu_flags(2), zero => nzc_alu_flags(1), 
                         carry => nzc_alu_flags(0));
-
-    register_ir : process( clk, reset )
-    begin
-        if reset = '1' then
-            ir <= x"00";
-        elsif rising_edge(clk) then
-            if ir_fetch = '1' then
-                ir <= data_bus0;
-            end if;
-        end if;
-    end process ; -- register_ir
-        
-    register_mar : process( clk, reset )
-    begin
-        if reset = '1' then
-            address <= x"00";
-        elsif rising_edge(clk) then
-            if mar_fetch = '1' then
-                address <= data_bus0;
-            end if;
-        end if;
-    end process ; -- register_mar
-        
-    register_pc : process( clk, reset )
-    begin
-        if reset = '1' then
-            pc <= x"00";
-        elsif rising_edge(clk) then
-            pc <= npc;
-        end if;
-    end process ; -- register_pc
-    process(pc_fetch, pc_inc, data_bus0, pc)
-    begin
-        if pc_fetch = '1' then
-            npc <= data_bus0;
-        elsif pc_inc = '1' then
-            npc <= std_logic_vector(unsigned(pc) + 1 );
-        else
-            npc <= pc;
-        end if;
-    end process;
-
-    register_a : process( clk, reset )
-    begin
-        if reset = '1' then
-            a_out <= x"00";
-        elsif rising_edge(clk) then
-            if a_fetch = '1' then
-                a_out <= data_bus0;
-            end if;
-        end if;
-    end process ; -- register_a
-
-    register_b : process( clk, reset )
-    begin
-        if reset = '1' then
-            b_out <= x"00";
-        elsif rising_edge(clk) then
-            if b_fetch = '1' then
-                b_out <= data_bus0;
-            end if;
-        end if;
-    end process ; -- register_b
-
-    flag_register : process( clk, reset )
-    begin
-        if reset = '1' then
-            nzc_flags_n <= "000";
-        elsif rising_edge(clk) then
-            if flag_fetch = '1'then
-                nzc_flags_n <= nzc_alu_flags;
-            end if;
-        end if;
-    end process ; -- flag_register
-    nzc_flags <= nzc_flags_n;
-
+    fr0 : fr port map(clk => clk, reset => reset, fr_fetch => flag_fetch, fr_in => nzc_alu_flags, fr_out => nzc_flags);
     data_bus0_mux : process( data_bus0_sel, data_in, alu_out, data_bus1 )
     begin
         case( data_bus0_sel ) is
@@ -123,13 +91,13 @@ begin
         end case ;
     end process ; -- data_bus0_mux
 
-    data_bus1_mux : process( data_bus1_sel, a_out, b_out, npc )
+    data_bus1_mux : process( data_bus1_sel, a, b, npc )
     begin
         case( data_bus1_sel ) is
         
             when "00" => data_bus1 <= npc;
-            when "01" => data_bus1 <= a_out;
-            when "10" => data_bus1 <= b_out;
+            when "01" => data_bus1 <= a;
+            when "10" => data_bus1 <= b;
             when others => data_bus1 <= x"00";
         
         end case ;

@@ -25,6 +25,13 @@ architecture bh of registers_tb is
         ) ;
     end component;
 begin
+
+    uut:registers port map( clk, reset, 
+                            ir_fetch, mar_fetch, pc_fetch, 
+                            pc_inc, a_fetch, b_fetch, flag_fetch, 
+                            data_in, data_bus0_sel, data_bus1_sel, alu_sel, 
+                            ir, address, data_out,
+                            nzc_flags);
     process 
     begin
         clk <= '0';
@@ -35,18 +42,29 @@ begin
 
     process
     begin
+        -- Reset --
         reset <= '1';
         data_in <= x"AA";
+        data_bus1_sel <= "00";
         wait for 3 * clock_period;
         reset <= '0';
         wait for clock_period / 2;
+        a_fetch <= '1';
         ir_fetch <= '1';
         mar_fetch <= '1';
         pc_fetch <= '1';
-        a_fetch <= '1';
         b_fetch <= '1';
         flag_fetch <= '1';
         data_bus0_sel <= "10";
+        wait for clock_period;
+        data_bus0_sel <= "01";
+        data_bus1_sel <= "01";
+        pc_inc <= '1';
+        pc_fetch <= '0';
+        wait for clock_period;
+        data_bus1_sel <= "10";
+        data_bus0_sel <= "00";
+
         wait;
     end process;
 
