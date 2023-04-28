@@ -9,7 +9,7 @@ entity registers is
     data_bus0_sel, data_bus1_sel : in std_logic_vector(1 downto 0);
     alu_sel : in std_logic_vector(3 downto 0);
     ir, address, data_out : out std_logic_vector(7 downto 0);
-    flags : out std_logic_vector(2 downto 0) -- negativ, zero, carry 
+    nzc_flags : out std_logic_vector(2 downto 0) -- negativ, zero, carry 
   ) ;
 end registers;
 
@@ -18,10 +18,24 @@ architecture bh of registers is
     signal data_bus0, data_bus1 : std_logic_vector(7 downto 0) := x"00";
     signal pc, npc : std_logic_vector(7 downto 0) := x"00";
     signal a_out, b_out : std_logic_vector(7 downto 0) := x"00";
-    signal nzc_flags : std_logic_vector(2 downto 0) := "000";
+    signal nzc_flags_n : std_logic_vector(2 downto 0) := "000";
     signal alu_out : std_logic_vector(7 downto 0) := x"00";
-    signal alu_flags : std_logic_vector(2 downto 0) := "000";
+    signal nzc_alu_flags : std_logic_vector(2 downto 0) := "000";
+    component alu
+        port (
+          a, b : in std_logic_vector(7 downto 0);
+          alu_out : out std_logic_vector(7 downto 0);
+          alu_sel : in std_logic_vector(3 downto 0);
+          zero, carry, negativ : out std_logic
+        ) ;
+    end component;
 begin
+
+    alu_u:alu port map( a => a_out, b => b_out, 
+                        alu_out => alu_out, alu_sel => alu_sel, 
+                        negativ => nzc_alu_flags(2), zero => nzc_alu_flags(1), 
+                        carry => nzc_alu_flags(0));
+
     register_ir : process( clk, reset )
     begin
         if reset = '1' then
@@ -88,14 +102,14 @@ begin
     flag_register : process( clk, reset )
     begin
         if reset = '1' then
-            nzc_flags <= "000";
+            nzc_flags_n <= "000";
         elsif rising_edge(clk) then
             if flag_fetch = '1'then
-                nzc_flags <= alu_flags;
+                nzc_flags_n <= nzc_alu_flags;
             end if;
         end if;
     end process ; -- flag_register
-    flags <= nzc_flags;
+    nzc_flags <= nzc_flags_n;
 
     data_bus0_mux : process( data_bus0_sel, data_in, alu_out, data_bus1 )
     begin

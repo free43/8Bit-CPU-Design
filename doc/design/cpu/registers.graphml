@@ -281,7 +281,7 @@
           <y:Geometry height="17.00787353515625" width="47.63547897338867" x="1168.8000000000002" y="692.4960632324219"/>
           <y:Fill color="#CCCCFF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="sandwich" modelPosition="s" textColor="#000000" verticalTextPosition="bottom" visible="true" width="54.021484375" x="-3.193002700805664" xml:space="preserve" y="21.00787353515625">flags(2:0)</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="sandwich" modelPosition="s" textColor="#000000" verticalTextPosition="bottom" visible="true" width="102.056640625" x="-27.210580825805664" xml:space="preserve" y="21.00787353515625">nzc_alu_flags(2:0)</y:NodeLabel>
           <y:SVGNodeProperties usingVisualBounds="true"/>
           <y:SVGModel svgBoundsPolicy="0">
             <y:SVGContent refid="1"/>
@@ -684,7 +684,6 @@
       </data>
     </edge>
     <edge id="e27" source="n7" target="n3">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="162.99999999999991" tx="0.0" ty="-9.099999999999909"/>
@@ -695,7 +694,6 @@
       </data>
     </edge>
     <edge id="e28" source="n7" target="n4">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="127.59999999999982" tx="-30.40000000000009" ty="-20.0">
@@ -709,7 +707,6 @@
       </data>
     </edge>
     <edge id="e29" source="n27" target="n19">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="-52.40000000000009" ty="11.107873535155932">
