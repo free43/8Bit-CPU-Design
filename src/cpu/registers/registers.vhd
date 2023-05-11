@@ -68,6 +68,23 @@ architecture bh of registers is
           fr_out : out std_logic_vector(2 downto 0)  
         ) ;
     end component;
+	 
+	 component data_bus1_mux
+    port(
+        a_in, b_in, pc_in : in std_logic_vector(7 downto 0);
+        data_bus_sel : in std_logic_vector(1 downto 0);
+        data_bus1 : out std_logic_vector(7 downto 0)
+    );
+	 end component;
+	 
+	 component data_bus0_mux
+	 port (
+    data_bus1, alu_in, data_in: in std_logic_vector(7 downto 0);
+	 data_bus0_sel : in std_logic_vector(1 downto 0);
+    data_bus0 : out std_logic_vector(7 downto 0)  
+	 ) ;
+	 end component;
+	 
 begin
 
     ir0: ir port map (clk => clk, reset => reset, ir_fetch => ir_fetch, data_bus => data_bus0, ir_out => ir_out);
@@ -79,30 +96,10 @@ begin
                         negativ => nzc_alu_flags(2), zero => nzc_alu_flags(1), 
                         carry => nzc_alu_flags(0));
     fr0 : fr port map(clk => clk, reset => reset, fr_fetch => flag_fetch, fr_in => nzc_alu_flags, fr_out => nzc_flags);
-    data_bus0_mux : process( data_bus0_sel, data_in, alu_out, data_bus1 )
-    begin
-        case( data_bus0_sel ) is
-        
-            when "00" => data_bus0 <= data_bus1;
-            when "01" => data_bus0 <= alu_out;
-            when "10" => data_bus0 <= data_in;
-            when others => data_bus0 <= x"00";
-        
-        end case ;
-    end process ; -- data_bus0_mux
-
-    data_bus1_mux : process( data_bus1_sel, a, b, npc )
-    begin
-        case( data_bus1_sel ) is
-        
-            when "00" => data_bus1 <= npc;
-            when "01" => data_bus1 <= a;
-            when "10" => data_bus1 <= b;
-            when others => data_bus1 <= x"00";
-        
-        end case ;
-    end process ; -- data_bus1_mux
-
+	 db0m: data_bus0_mux port map (data_bus1 => data_bus1, alu_in => alu_out, data_in => data_in, data_bus0 => data_bus0,
+												data_bus0_sel => data_bus0_sel);
+	 db1m: data_bus1_mux port map (a_in => a, b_in => b, pc_in => npc, data_bus1 => data_bus1, data_bus_sel => data_bus1_sel);
+    
     data_out <= data_bus1;
 
 end bh ; -- bh
