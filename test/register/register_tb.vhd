@@ -45,7 +45,9 @@ begin
         -- Reset --
         reset <= '1';
         data_in <= x"AA";
-        data_bus1_sel <= "00";
+        data_bus0_sel <= "10";
+		  data_bus1_sel <= "00";
+		  alu_sel <= x"0";
         wait for 3 * clock_period;
         reset <= '0';
         wait for clock_period / 2;
@@ -55,7 +57,7 @@ begin
         pc_fetch <= '1';
         b_fetch <= '1';
         flag_fetch <= '1';
-        data_bus0_sel <= "10";
+		  -- ir should be x"AA", data_out should be x"AA", address should be x"AA", nzc_flags should be "101"
         wait for clock_period;
         data_bus0_sel <= "01";
         data_bus1_sel <= "01";
