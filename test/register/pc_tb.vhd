@@ -31,13 +31,13 @@ begin
 	 
 	 process
     begin
-	 -- pc_out 0 setzen mit reset = 1
+	 --  pc_out should be set to 0 with reset = 1
 	 reset <= '1';
 	 data_bus <= x"AA";
 	 pc_fetch <= '1';
 	 wait for 10 ns;
 	 reset <= '0';
-	 -- nun werden die Werte zu pc_out übertragen, da reset = 0 ist
+	 -- Value x"AA" should be set to pc_out, because reset = 0
 	 wait for 10 ns;
 	 data_bus <= x"00";
 	 wait for 10 ns;
@@ -46,12 +46,12 @@ begin
 	 wait for 10 ns;
 	 data_bus <= x"AF";
 	 wait for 10 ns;
-	 -- Wert vom data_bus wird nicht mehr übernommen, da pc_fetch = 0 ist
+	 -- Value x"AF" shouldn't be set to pc_out, becuase pc_fetch = 0
 	 pc_inc <= '1';
 	 wait for 40 ns;
 	 pc_inc <= '0';
 	 wait for 10 ns;
-	  -- pc_out wird so lange incrementiert bis pc_inc wieder 0 ist, dann ist aber auch pc_out = 0000
+	  -- pc_out is incremented until pc_inc is 0 again
 	 pc_fetch <= '1';
 	 pc_inc <= '1';
 	 wait for 10 ns;
@@ -61,7 +61,7 @@ begin
 	 wait for 10 ns;
 	 pc_inc <= '1';
 	 pc_fetch <= '1';
-	 -- der Wert vom data_bus wird gegenüber pc_inc bevorzugt
+	 -- the value of data_bus is preferred to pc_inc
 	 wait for 10 ns;
 	 pc_inc <= '0';
 	 pc_fetch <= '0';
@@ -71,10 +71,10 @@ begin
 	 pc_inc <= '0';
 	 wait for 10 ns;
 	 pc_inc <= '1';
-	 -- pc_inc wird auf den data_out-Wert aufsummiert
+	 -- pc_inc is summed up to the data_out value
 	 wait for 10 ns;
 	 reset <= '1';
-	 -- bei reset = 1 wird pc_out wieder 0 gesetzt
+	 -- if reset = 1, pc_out should be set back to 0
 	 wait;
 	 end process ; -- 
 end bh ; -- bh
