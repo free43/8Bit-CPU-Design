@@ -2,15 +2,15 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity data_bus_0_mux is
+entity data_bus0_mux is
   port (
     data_bus1, alu_in, data_in: in std_logic_vector(7 downto 0);
 	 data_bus0_sel : in std_logic_vector(1 downto 0);
     data_bus0 : out std_logic_vector(7 downto 0)  
   ) ;
-end data_bus_0_mux;
+end data_bus0_mux;
 
-architecture bh of data_bus_0_mux is
+architecture bh of data_bus0_mux is
     
 begin
 
