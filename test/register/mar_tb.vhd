@@ -30,28 +30,28 @@ begin
 	 
 	 process
      begin
-	  -- mar_out 0 setzen mit reset = 1
+	  -- reset
 	 reset <= '1';
 	 data_bus <= x"AA";
 	 mar_fetch <= '1';
 	 wait for 10 ns;
 	 reset <= '0';
-	 -- nun wird mar_out mit x"AA" beschrieben
+	 -- mar_out should be set to x"AA" 
 	 wait for 10 ns;
 	 data_bus <= x"00";
 	 wait for 10 ns;
-	 -- mar_out wird mit x"00" beschrieben
+	 -- mar_out should be set to x"00"
 	 data_bus <= x"AA";
 	 mar_fetch <= '0';
 	 wait for 10 ns;
 	 data_bus <= x"AF";
 	 wait for 10 ns;
-	 -- Werte werden nicht nach mar_out übertragen, da mar_fetch = 0 ist
+	 -- set mar_fetch to 0
 	 mar_fetch <= '1';
 	 wait for 10 ns;
-	 -- x"AF" von data_bus wird in mar_out geschrieben
+	 -- x"AF" should be written to mar_out
 	 reset <= '1';
 	 wait;
-	 -- mar_out wird auf x"00" zurückgesetzt
+	 -- reset
 	  end process ; -- 
 end bh ; -- bh
