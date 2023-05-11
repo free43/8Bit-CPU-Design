@@ -29,29 +29,29 @@ begin
     end process;
 	 
 	 process
-     begin
-	  	  -- ir_out 0 setzen mit reset = 1
+		begin
+	  -- ir_out set to with reset = 1
 	 reset <= '1';
 	 data_bus <= x"AA";
 	 ir_fetch <= '1';
 	 wait for 10 ns;
 	 reset <= '0';
-	 -- nun wird ir_out mit x"AA" beschrieben
+	 -- ir_out set to x"AA" 
 	 wait for 10 ns;
 	 data_bus <= x"00";
 	 wait for 10 ns;
-	 -- ir_out wird mit x"00" beschrieben
+	 -- ir_out set to x"00" 
 	 data_bus <= x"AA";
 	 ir_fetch <= '0';
 	 wait for 10 ns;
 	 data_bus <= x"AF";
 	 wait for 10 ns;
-	 -- Werte werden nicht nach ir_out übertragen, da ir_fetch = 0 ist
+	 -- ir_out should not be changed, because ir_fetch is 0
 	 ir_fetch <= '1';
 	 wait for 10 ns;
-	 -- x"AF" von data_bus wird in ir_out geschrieben
+	 -- set ir_out to x"AF"
 	 reset <= '1';
 	 wait;
-	 -- ir_out wird auf x"00" zurückgesetzt
+	 -- ir_out should be reseted
 	  end process ; -- 
 end bh ; -- bh
