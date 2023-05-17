@@ -10,4 +10,5 @@ package ALU_CMDS is
     constant INC_B_CMD : std_logic_vector(3 downto 0) := x"5"; -- b++ --
     constant DEC_A_CMD : std_logic_vector(3 downto 0) := x"6"; -- a-- --
     constant DEC_B_CMD : std_logic_vector(3 downto 0) := x"7"; -- b-- --
+    constant NO_OP_CMD : std_logic_vector(3 downto 0) := x"F"; -- No operation done -- 
 end ALU_CMDS;
