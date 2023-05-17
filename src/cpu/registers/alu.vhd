@@ -1,7 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-
+use work.alu_cmds.all;
 entity alu is
   port (
     a, b : in std_logic_vector(7 downto 0);
@@ -23,7 +23,7 @@ begin
     begin
         case( alu_sel ) is
         
-            when x"0" =>    --Add: a + b--
+            when ADD_CMD =>    --Add: a + b--
                             res :=  unsigned('0' & a) + unsigned( '0' & b);
                             alu_out <= std_logic_vector(res(7 downto 0));
                             negativ <= res(7);
@@ -33,7 +33,7 @@ begin
                                 zero <= '0';
                             end if;
                             carry <= res(8);
-            when x"1" =>    --Sub: a - b--
+            when SUB_CMD =>    --Sub: a - b--
                             res :=  unsigned('0' & a) - unsigned( '0' & b);
                             alu_out <= std_logic_vector(res(7 downto 0));
                             negativ <= res(7);
@@ -43,7 +43,7 @@ begin
                                 zero <= '0';
                             end if;
                             carry <= res(8);
-            when x"2" =>    --&: a & b --
+            when AND_CMD =>    --&: a & b --
                             res :=  unsigned('0' & (a and b));
                             alu_out <= std_logic_vector(res(7 downto 0));
                             negativ <= res(7);
@@ -53,7 +53,7 @@ begin
                                 zero <= '0';
                             end if;
                             carry <= res(8);
-            when x"3" =>    --|: a | b --
+            when OR_CMD =>    --|: a | b --
                             res :=  unsigned('0' & (a or b));
                             alu_out <= std_logic_vector(res(7 downto 0));
                             negativ <= res(7);
@@ -63,7 +63,7 @@ begin
                                 zero <= '0';
                             end if;
                             carry <= res(8);
-            when x"4" =>    --a++: a + 1 --
+            when INC_A_CMD =>    --a++: a + 1 --
                             res :=  unsigned('0' & a) + one;
                             alu_out <= std_logic_vector(res(7 downto 0));
                             negativ <= res(7);
@@ -73,7 +73,7 @@ begin
                                 zero <= '0';
                             end if;
                             carry <= res(8);
-            when x"5" =>    --b++: b + 1 --
+            when INC_B_CMD =>    --b++: b + 1 --
                             res :=  unsigned('0' & b) + one;
                             alu_out <= std_logic_vector(res(7 downto 0));
                             negativ <= res(7);
@@ -83,7 +83,7 @@ begin
                                 zero <= '0';
                             end if;
                             carry <= res(8);
-            when x"6" =>    -- a--: a - 1 --
+            when DEC_A_CMD =>    -- a--: a - 1 --
                             res :=  unsigned('0' & a) - one;
                             alu_out <= std_logic_vector(res(7 downto 0));
                             negativ <= res(7);
@@ -93,7 +93,7 @@ begin
                                 zero <= '0';
                             end if;
                             carry <= res(8);
-            when x"7" =>    -- b--: b - 1 --
+            when DEC_B_CMD =>    -- b--: b - 1 --
                             res :=  unsigned('0' & b) - one;
                             alu_out <= std_logic_vector(res(7 downto 0));
                             negativ <= res(7);
