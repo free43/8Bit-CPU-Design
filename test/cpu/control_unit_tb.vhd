@@ -38,11 +38,152 @@ architecture bh of control_unit_tb is
 	 
 	 process
     begin
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"00";
+		 -- LDA_IMM was performed successfully
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"02";
+		 -- LDB_IMM failed, b_fetch != 1 in state LDB_IMM_6
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"01";
+		 -- LDA_DIR was performed successfully
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"03";
+		 -- LDB_DIR failed, b != 1, ir_fetch to soon, for ir_load
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"04";
+		 -- STA_DIR was performed successfully
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"05";
+		 -- STB_DIR was performed successfully
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"55";
+		 -- ADD_AB was performed successfully
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"56";
+		 -- SUB_AB was performed successfully
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"57";
+		 -- AND_AB was performed successfully
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"58";
+		 -- OR_AB was performed successfully
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"59";
+		 -- INC_A was performed successfully
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"5A";
+		 -- INC_B failed, b_fetch != 1
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"5B";
+		 -- DEC_A was performed successfully
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"5C";
+		 -- DEC_B failed, b_fetch != 1
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"AA";
+		 -- JMP was performed successfully
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"AB";
+		 -- JMP_IN was performed successfully
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"AC";
+		 -- JMP_NN was performed successfully
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"AD";
+		 -- JMP_IZ was performed successfully
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"AE";
+		 -- JMP_NZ was performed successfully
+		 
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"AF";
+		 -- JMP_IC was performed successfully
+		 
 		 reset <= '1';
 		 wait for clock_period;
 		 reset <= '0';
 		 wait for 3 * clock_period;
-		 ir <= x"00";
+		 ir <= x"B0";
+		 -- JMP_NC was performed successfully
 	 	 wait;
 	 end process ; -- 
 end bh ; -- bh
