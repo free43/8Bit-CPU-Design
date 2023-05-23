@@ -34,10 +34,12 @@ architecture bh of control_unit is
                 LDA_DIR_5,
                 LDA_DIR_6,
                 LDA_DIR_7,
+					 LDA_DIR_8,
                 LDB_DIR_4,
                 LDB_DIR_5,
                 LDB_DIR_6,
                 LDB_DIR_7,
+					 LDB_DIR_8,
         -- Store states --
             STA_DIR_4,
             STA_DIR_5,
@@ -132,11 +134,13 @@ begin
                     when LDA_DIR_4 => q_ns <= LDA_DIR_5;
                     when LDA_DIR_5 => q_ns <= LDA_DIR_6;
                     when LDA_DIR_6 => q_ns <= LDA_DIR_7;
-                    when LDA_DIR_7 => q_ns <= IR_Fetch_0;
+						  when LDA_DIR_7 => q_ns <= LDA_DIR_8;
+                    when LDA_DIR_8 => q_ns <= IR_Fetch_0;
                     when LDB_DIR_4 => q_ns <= LDB_DIR_5;
                     when LDB_DIR_5 => q_ns <= LDB_DIR_6;
                     when LDB_DIR_6 => q_ns <= LDB_DIR_7;
-                    when LDB_DIR_7 => q_ns <= IR_Fetch_0;
+						  when LDB_DIR_7 => q_ns <= LDB_DIR_8;
+                    when LDB_DIR_8 => q_ns <= IR_Fetch_0;
             -- Store --
                 when STA_DIR_4 => q_ns <= STA_DIR_5;
                 when STA_DIR_5 => q_ns <= STA_DIR_6;
@@ -215,10 +219,11 @@ begin
                     when LDA_IMM_6 => a_fetch <= '1'; data_bus0_sel <= "10";
                     when LDB_IMM_6 => b_fetch <= '1'; data_bus0_sel <= "10";
                 -- Directe --
-                    when LDA_DIR_5 | LDB_DIR_5 => mar_fetch <= '1'; data_bus0_sel <= "10";
-                    when LDA_DIR_6 | LDB_DIR_6 => pc_inc <= '1';
-                    when LDA_DIR_7 => a_fetch <= '1'; data_bus0_sel <= "10";
-                    when LDB_DIR_7 => b_fetch <= '1'; data_bus0_sel <= "10"; 
+					     when LDA_DIR_5 | LDB_DIR_5 => null;
+                    when LDA_DIR_6 | LDB_DIR_6 => mar_fetch <= '1'; data_bus0_sel <= "10";
+                    when LDA_DIR_7 | LDB_DIR_7 => pc_inc <= '1';
+                    when LDA_DIR_8 => a_fetch <= '1'; data_bus0_sel <= "10";
+                    when LDB_DIR_8 => b_fetch <= '1'; data_bus0_sel <= "10"; 
             -- Store --
                 when STA_DIR_6 | STB_DIR_6 => data_bus0_sel <= "10"; mar_fetch <= '1';
                 when STA_DIR_7 => data_bus1_sel <= "01"; write_enable <= '1';
