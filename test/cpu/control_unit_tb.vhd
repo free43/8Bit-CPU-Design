@@ -25,7 +25,7 @@ architecture bh of control_unit_tb is
     constant clock_period : time := 10 ns;
 	 begin
     uut:control_unit port map(clk => clk, reset => reset, ir => ir, nzc_alu_flags => nzc_alu_flags, alu_sel => alu_sel, data_bus0_sel => data_bus0_sel,
-	 data_bus1_sel => data_bus1_sel, ir_fetch => ir_fetch, mar_fetch => mar_fetch, pc_fetch => pc_fetch, pc_inc => pc_inc, a_fetch => a_fetch,
+	 data_bus1_sel => data_bus1_sel, ir_fetch => ir_fetch, mar_fetch => mar_fetch, pc_fetch => pc_fetch, pc_inc => pc_inc, a_fetch => a_fetch, b_fetch => b_fetch,
 	 flag_fetch => flag_fetch, write_enable => write_enable);
 	 
     process
@@ -50,13 +50,13 @@ architecture bh of control_unit_tb is
 		 --reset <= '0';
 		 --wait for 3 * clock_period;
 		 --ir <= x"02";
-		 -- LDB_IMM failed, b_fetch != 1 in state LDB_IMM_6
+		 -- LDB_IMM was performed successfully
 		 
-		 --reset <= '1';
-		 --wait for clock_period;
-		 --reset <= '0';
-		 --wait for 3 * clock_period;
-		 --ir <= x"01";
+		 reset <= '1';
+		 wait for clock_period;
+		 reset <= '0';
+		 wait for 3 * clock_period;
+		 ir <= x"01";
 		 -- LDA_DIR was performed successfully
 		 
 		 --reset <= '1';
@@ -64,7 +64,7 @@ architecture bh of control_unit_tb is
 		 --reset <= '0';
 		 --wait for 3 * clock_period;
 		 --ir <= x"03";
-		 -- LDB_DIR failed, b != 1, ir_fetch to soon, for ir_load
+		 -- LDB_DIR was performed successfully
 		 
 		 --reset <= '1';
 		 --wait for clock_period;
@@ -120,7 +120,7 @@ architecture bh of control_unit_tb is
 		 --reset <= '0';
 		 --wait for 3 * clock_period;
 		 --ir <= x"5A";
-		 -- INC_B failed, b_fetch != 1
+		 -- INC_B was performed successfully
 		 
 		 --reset <= '1';
 		 --wait for clock_period;
@@ -134,7 +134,7 @@ architecture bh of control_unit_tb is
 		 --reset <= '0';
 		 --wait for 3 * clock_period;
 		 --ir <= x"5C";
-		 -- DEC_B failed, b_fetch != 1
+		 -- DEC_B was performed successfully
 		 
 		 --reset <= '1';
 		 --wait for clock_period;
@@ -178,11 +178,11 @@ architecture bh of control_unit_tb is
 		 --ir <= x"AF";
 		 -- JMP_IC was performed successfully
 		 
-		 reset <= '1';
-		 wait for clock_period;
-		 reset <= '0';
-		 wait for 3 * clock_period;
-		 ir <= x"B0";
+		 --reset <= '1';
+		 --wait for clock_period;
+		 --reset <= '0';
+		 --wait for 3 * clock_period;
+		 --ir <= x"B0";
 		 -- JMP_NC was performed successfully
 	 	 wait;
 	 end process ; -- 
