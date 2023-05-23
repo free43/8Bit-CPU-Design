@@ -14,9 +14,9 @@ architecture bh of rom_memory is
     type rom is array (0 to 127) of std_logic_vector(7 downto 0);
     signal enable : std_logic := '0';
     constant my_rom : rom := (      0 => LDA_IMM,
-                                    1 => LDA_IMM,
+                                    1 => x"AA",
                                     2 => LDA_DIR,
-                                    3 => LDB_IMM,
+                                    3 => x"02",
                                     4 => LDB_DIR, 
                                     others => x"00" );
 begin
