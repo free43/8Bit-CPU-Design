@@ -18,7 +18,13 @@ architecture bh of rom_memory is
                                     2 => LDA_DIR,
                                     3 => x"02",
                                     4 => LDB_DIR,
-											   5 => x"04",	
+											   5 => x"04",
+											   6 => LDB_IMM,
+											   7 => x"05",
+											   8 => STA_DIR,
+												9 => x"80",
+												10 => STB_DIR,
+												11 => x"81",
                                     others => x"00" );
 begin
     enable <= '1' when address >= x"00" and address <= x"7F" else '0';
