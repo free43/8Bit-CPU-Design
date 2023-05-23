@@ -20,10 +20,10 @@ package INSTRUCTIONS is
     constant DEC_B : std_logic_vector(7 downto 0) := x"5C"; -- DEC_B: B = B - 1--
     --Branches--
     constant JMP : std_logic_vector(7 downto 0) := x"AA"; --JMP <address> jumps to address--
-    constant JMP_IN : std_logic_vector(7 downto 0) := x"AA"; --JMP_IN <address> jumps to address, if negativ flag is set (N=1)--
-    constant JMP_NN : std_logic_vector(7 downto 0) := x"AB"; --JMP_NN <address> jumps to address, if negativ flag isn't set (N=0)--
-    constant JMP_IZ : std_logic_vector(7 downto 0) := x"AC"; --JMP_IZ <address> jumps to address, if zero flag is set (Z=1)--
-    constant JMP_NZ : std_logic_vector(7 downto 0) := x"AD"; --JMP_NZ <address> jumps to address, if zero flag isn't set (Z=0)--
-    constant JMP_IC : std_logic_vector(7 downto 0) := x"AE"; --JMP_IC <address> jumps to address, if carry flag is set (C=1)--
-    constant JMP_NC : std_logic_vector(7 downto 0) := x"AF"; --JMP_NC <address> jumps to address, if carry is'nt carry set (C=0)--
+    constant JMP_IN : std_logic_vector(7 downto 0) := x"AB"; --JMP_IN <address> jumps to address, if negativ flag is set (N=1)--
+    constant JMP_NN : std_logic_vector(7 downto 0) := x"AC"; --JMP_NN <address> jumps to address, if negativ flag isn't set (N=0)--
+    constant JMP_IZ : std_logic_vector(7 downto 0) := x"AD"; --JMP_IZ <address> jumps to address, if zero flag is set (Z=1)--
+    constant JMP_NZ : std_logic_vector(7 downto 0) := x"AE"; --JMP_NZ <address> jumps to address, if zero flag isn't set (Z=0)--
+    constant JMP_IC : std_logic_vector(7 downto 0) := x"AF"; --JMP_IC <address> jumps to address, if carry flag is set (C=1)--
+    constant JMP_NC : std_logic_vector(7 downto 0) := x"B0"; --JMP_NC <address> jumps to address, if carry is'nt carry set (C=0)--
 end INSTRUCTIONS;
