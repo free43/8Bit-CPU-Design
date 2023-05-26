@@ -34,10 +34,12 @@ architecture bh of control_unit is
                 LDA_DIR_5,
                 LDA_DIR_6,
                 LDA_DIR_7,
+					 LDA_DIR_8,
                 LDB_DIR_4,
                 LDB_DIR_5,
                 LDB_DIR_6,
                 LDB_DIR_7,
+					 LDB_DIR_8,
         -- Store states --
             STA_DIR_4,
             STA_DIR_5,
@@ -132,11 +134,13 @@ begin
                     when LDA_DIR_4 => q_ns <= LDA_DIR_5;
                     when LDA_DIR_5 => q_ns <= LDA_DIR_6;
                     when LDA_DIR_6 => q_ns <= LDA_DIR_7;
-                    when LDA_DIR_7 => q_ns <= IR_Fetch_0;
+						  when LDA_DIR_7 => q_ns <= LDA_DIR_8;
+                    when LDA_DIR_8 => q_ns <= IR_Fetch_0;
                     when LDB_DIR_4 => q_ns <= LDB_DIR_5;
                     when LDB_DIR_5 => q_ns <= LDB_DIR_6;
                     when LDB_DIR_6 => q_ns <= LDB_DIR_7;
-                    when LDB_DIR_7 => q_ns <= IR_Fetch_0;
+						  when LDB_DIR_7 => q_ns <= LDB_DIR_8;
+                    when LDB_DIR_8 => q_ns <= IR_Fetch_0;
             -- Store --
                 when STA_DIR_4 => q_ns <= STA_DIR_5;
                 when STA_DIR_5 => q_ns <= STA_DIR_6;
@@ -182,6 +186,11 @@ begin
                     end if;
                 when JMP_NC_4 => q_ns <= JMP_NC_5;
                 when JMP_NC_5 => 
+                    if nzc_alu_flags(0) = '0' then 
+                        q_ns <= JMP_6; 
+                    else 
+                        q_ns <= IR_Fetch_0; 
+                    end if;
                 when JMP_IN_4 => q_ns <= JMP_IN_5;
                 when JMP_IN_5 => 
                     if nzc_alu_flags(2) = '1' then 
@@ -215,29 +224,30 @@ begin
                     when LDA_IMM_6 => a_fetch <= '1'; data_bus0_sel <= "10";
                     when LDB_IMM_6 => b_fetch <= '1'; data_bus0_sel <= "10";
                 -- Directe --
-                    when LDA_DIR_5 | LDB_DIR_5 => mar_fetch <= '1'; data_bus0_sel <= "10";
-                    when LDA_DIR_6 | LDB_DIR_6 => pc_inc <= '1';
-                    when LDA_DIR_7 => a_fetch <= '1'; data_bus0_sel <= "10";
-                    when LDB_DIR_7 => b_fetch <= '1'; data_bus0_sel <= "10"; 
+					     when LDA_DIR_5 | LDB_DIR_5 => null;
+                    when LDA_DIR_6 | LDB_DIR_6 => mar_fetch <= '1'; data_bus0_sel <= "10";
+                    when LDA_DIR_7 | LDB_DIR_7 => pc_inc <= '1';
+                    when LDA_DIR_8 => a_fetch <= '1'; data_bus0_sel <= "10";
+                    when LDB_DIR_8 => b_fetch <= '1'; data_bus0_sel <= "10"; 
             -- Store --
                 when STA_DIR_6 | STB_DIR_6 => data_bus0_sel <= "10"; mar_fetch <= '1';
                 when STA_DIR_7 => data_bus1_sel <= "01"; write_enable <= '1';
                 when STB_DIR_7 => data_bus1_sel <= "10"; write_enable <= '1';
             -- Arithmetic and Logic --
-                when ADD_AB_4 => alu_sel <= ADD_CMD; data_bus0_sel <= "01"; a_fetch <= '1'; data_bus1_sel <= "10";
-                when SUB_AB_4 => alu_sel <= SUB_CMD; data_bus0_sel <= "01"; a_fetch <= '1'; data_bus1_sel <= "10";
-                when AND_AB_4 => alu_sel <= AND_CMD; data_bus0_sel <= "01"; a_fetch <= '1'; data_bus1_sel <= "10";
-                when OR_AB_4 => alu_sel <= OR_CMD; data_bus0_sel <= "01"; a_fetch <= '1'; data_bus1_sel <= "10";
-                when INC_A_4 => alu_sel <= INC_A_CMD; data_bus0_sel <= "01"; a_fetch <= '1'; 
-                when INC_B_4 => alu_sel <= INC_B_CMD; data_bus0_sel <= "01"; data_bus1_sel <= "10"; b_fetch <= '1';
-                when DEC_B_4 => alu_sel <= DEC_B_CMD; data_bus0_sel <= "01"; data_bus1_sel <= "10"; b_fetch <= '1';                
-                when DEC_A_4 => alu_sel <= DEC_A_CMD; data_bus0_sel <= "01"; a_fetch <= '1';  
+                when ADD_AB_4 => alu_sel <= ADD_CMD; data_bus0_sel <= "01"; a_fetch <= '1'; data_bus1_sel <= "10"; flag_fetch <= '1';
+                when SUB_AB_4 => alu_sel <= SUB_CMD; data_bus0_sel <= "01"; a_fetch <= '1'; data_bus1_sel <= "10"; flag_fetch <= '1';
+                when AND_AB_4 => alu_sel <= AND_CMD; data_bus0_sel <= "01"; a_fetch <= '1'; data_bus1_sel <= "10"; flag_fetch <= '1';
+                when OR_AB_4 => alu_sel <= OR_CMD; data_bus0_sel <= "01"; a_fetch <= '1'; data_bus1_sel <= "10"; flag_fetch <= '1';
+                when INC_A_4 => alu_sel <= INC_A_CMD; data_bus0_sel <= "01"; a_fetch <= '1'; flag_fetch <= '1';
+                when INC_B_4 => alu_sel <= INC_B_CMD; data_bus0_sel <= "01"; data_bus1_sel <= "10"; b_fetch <= '1'; flag_fetch <= '1';
+                when DEC_B_4 => alu_sel <= DEC_B_CMD; data_bus0_sel <= "01"; data_bus1_sel <= "10"; b_fetch <= '1'; flag_fetch <= '1';
+                when DEC_A_4 => alu_sel <= DEC_A_CMD; data_bus0_sel <= "01"; a_fetch <= '1'; flag_fetch <= '1';
             -- Branches --
                 when JMP_4 => mar_fetch <= '1'; data_bus1_sel <= "00"; data_bus0_sel <= "00";
                 when JMP_5 => NULL;
                 when JMP_6 => data_bus0_sel <= "10"; pc_fetch <= '1';
                 when JMP_IN_4 | JMP_NN_4 | JMP_IC_4 | JMP_NC_4 | JMP_IZ_4 | JMP_NZ_4 => 
-                            mar_fetch <= '1'; data_bus1_sel <= "00"; data_bus0_sel <= "00"; flag_fetch <= '1';
+                            mar_fetch <= '1'; data_bus1_sel <= "00"; data_bus0_sel <= "00";
                 when JMP_IN_5 | JMP_NN_5 | JMP_IC_5 | JMP_NC_5 | JMP_IZ_5 | JMP_NZ_5 => pc_inc <= '1';
             when others =>  NULL;
         end case ;
