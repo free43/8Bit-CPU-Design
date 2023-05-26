@@ -24,8 +24,10 @@ architecture bh of rom_memory is
 												8 => LDB_DIR,
 												9 => x"80",
 												10 => ADD_AB,
-												11 => JMP,
-												12 => x"02",
+												11 => JMP_IC,
+												12 => x"00",
+												13 => JMP,
+												14 => x"02",
 						
 												100 => LDB_IMM,
 												101 => x"02",
