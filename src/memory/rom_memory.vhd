@@ -14,10 +14,28 @@ architecture bh of rom_memory is
     type rom is array (0 to 127) of std_logic_vector(7 downto 0);
     signal enable : std_logic := '0';
     constant my_rom : rom := (      0 => LDA_IMM,
-                                    1 => LDA_IMM,
-                                    2 => LDA_DIR,
-                                    3 => LDB_IMM,
-                                    4 => LDB_DIR, 
+                                    1 => x"01",
+                                    2 => STA_DIR,
+                                    3 => x"F8",
+                                    4 => JMP,
+                                    5 => x"64",
+                                    6 => STA_DIR,
+                                    7 => x"80",
+                                    8 => LDB_DIR,
+                                    9 => x"80",
+                                    10 => ADD_AB,
+                                    11 => JMP_IC,
+                                    12 => x"00",
+                                    13 => JMP,
+                                    14 => x"02",
+            
+                                    100 => LDB_IMM,
+                                    101 => x"02",
+                                    102 => DEC_B,
+                                    103 => JMP_NZ,
+                                    104 => x"66",
+                                    105 => JMP,
+                                    106 => x"06",
                                     others => x"00" );
 begin
     enable <= '1' when address >= x"00" and address <= x"7F" else '0';
